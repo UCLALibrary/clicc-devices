@@ -1,0 +1,23 @@
+[
+{
+  "model": "clicc_devices.itemtype",
+  "pk": 1,
+  "fields": {
+    "name": "Macbook"
+  }
+},
+{
+  "model": "clicc_devices.itemtype",
+  "pk": 2,
+  "fields": {
+    "name": "Chromebook"
+  }
+},
+{
+  "model": "clicc_devices.itemtype",
+  "pk": 3,
+  "fields": {
+    "name": "iPad"
+  }
+}
+]
