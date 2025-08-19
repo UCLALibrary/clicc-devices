@@ -7,9 +7,11 @@ class SetAdmin(admin.ModelAdmin):
     list_display = ("alma_set_id", "name", "unit", "type")
     search_fields = ("alma_set_id", "name", "unit")
     list_filter = ("type", "unit")
+    ordering = ("name",)
 
 
 @admin.register(ItemType)
 class ItemTypeAdmin(admin.ModelAdmin):
     list_display = ("name",)
     search_fields = ("name",)
+    ordering = ("name",)
