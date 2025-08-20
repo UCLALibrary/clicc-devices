@@ -7,3 +7,5 @@ whitenoise==6.9.0
 
 # Add optional packages below.
 # django-simple-history==3.8.0 
+# Install the Alma API client from GitHub.
+git+https://github.com/UCLALibrary/alma-api-client
