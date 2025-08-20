@@ -39,23 +39,31 @@ class Command(BaseCommand):
 
         if set_id:
             if not Set.objects.filter(alma_set_id=set_id).exists():
-                logger.error(f"Set with Alma ID {set_id} does not exist.")
+                logger.error(
+                    f"Set with Alma ID {set_id} does not exist in this application."
+                )
                 return
             sets_to_process = [Set.objects.get(alma_set_id=set_id)]
         else:
             sets_to_process = Set.objects.all()
 
-        logger.info(f"Starting retrieval for {len(sets_to_process)} set(s) from Alma.")
+        logger.info(f"Starting retrieval of {len(sets_to_process)} set(s) from Alma.")
         for set_obj in sets_to_process:
             logger.info(
-                f"Starting retrieval for set: {set_obj.name} (Alma ID: {set_obj.alma_set_id})"
+                f"Starting retrieval of set: {set_obj.name} (Alma ID: {set_obj.alma_set_id})"
             )
-
-            # Remove existing items associated with the set
-            Item.objects.filter(set=set_obj).delete()
 
             # Retrieve set from Alma
             alma_set = alma_client.get_set(set_obj.alma_set_id)
+
+            if not alma_set:
+                logger.error(
+                    f"Failed to retrieve Alma set with Alma ID {set_obj.alma_set_id}."
+                )
+                continue
+
+            # Remove existing items associated with the set
+            Item.objects.filter(set=set_obj).delete()
 
             # Iterate through the members of the Alma set,
             # and create Item objects for each member
@@ -71,7 +79,7 @@ class Command(BaseCommand):
 
             num_items = Item.objects.filter(set=set_obj).count()
             logger.info(
-                f"Finished retrieval for set: {set_obj.name} "
+                f"Finished retrieval of set: {set_obj.name} "
                 f"(Alma ID: {set_obj.alma_set_id}). "
                 f"Items retrieved: {num_items}."
             )
