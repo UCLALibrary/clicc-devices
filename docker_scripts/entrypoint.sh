@@ -35,7 +35,7 @@ if [ "$DJANGO_RUN_ENV" = "dev" ]; then
 
   ##### FIXTURES: Enable and add as needed. #####
   # Load fixtures, only in dev environment.
-  python manage.py loaddata item_types.json
+  python manage.py loaddata item_types.json sets.json
   ##### END FIXTURES #####
 fi
 
