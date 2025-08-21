@@ -1,68 +1,68 @@
 [
-{
-  "model": "clicc_devices.set",
-  "pk": 3,
-  "fields": {
-    "alma_set_id": "25239937750006533",
-    "name": "CLICC iPads - YRL",
-    "unit": "YRL",
-    "type": 3,
-    "retrieved": "2025-08-20T18:28:40Z"
+  {
+    "model": "clicc_devices.set",
+    "pk": 1,
+    "fields": {
+      "alma_set_id": "25239937750006533",
+      "name": "CLICC iPads - YRL",
+      "unit": "YRL",
+      "type": 3,
+      "retrieved": "2025-08-20T18:28:40Z"
+    }
+  },
+  {
+    "model": "clicc_devices.set",
+    "pk": 2,
+    "fields": {
+      "alma_set_id": "25239935740006533",
+      "name": "CLICC iPads - Powell",
+      "unit": "Powell",
+      "type": 3,
+      "retrieved": "2025-08-20T18:29:02Z"
+    }
+  },
+  {
+    "model": "clicc_devices.set",
+    "pk": 3,
+    "fields": {
+      "alma_set_id": "25239923780006533",
+      "name": "CLICC Macbooks - YRL",
+      "unit": "YRL",
+      "type": 1,
+      "retrieved": "2025-08-20T18:29:20Z"
+    }
+  },
+  {
+    "model": "clicc_devices.set",
+    "pk": 4,
+    "fields": {
+      "alma_set_id": "25239918420006533",
+      "name": "CLICC Macbooks - Powell",
+      "unit": "Powell",
+      "type": 1,
+      "retrieved": "2025-08-20T18:29:35Z"
+    }
+  },
+  {
+    "model": "clicc_devices.set",
+    "pk": 5,
+    "fields": {
+      "alma_set_id": "25232644060006533",
+      "name": "CLICC Chromebooks - YRL",
+      "unit": "YRL",
+      "type": 2,
+      "retrieved": "2025-08-20T18:29:59Z"
+    }
+  },
+  {
+    "model": "clicc_devices.set",
+    "pk": 6,
+    "fields": {
+      "alma_set_id": "25232640150006533",
+      "name": "CLICC Chromebooks - Powell",
+      "unit": "Powell",
+      "type": 2,
+      "retrieved": "2025-08-20T18:30:13Z"
+    }
   }
-},
-{
-  "model": "clicc_devices.set",
-  "pk": 4,
-  "fields": {
-    "alma_set_id": "25239935740006533",
-    "name": "CLICC iPads - Powell",
-    "unit": "Powell",
-    "type": 3,
-    "retrieved": "2025-08-20T18:29:02Z"
-  }
-},
-{
-  "model": "clicc_devices.set",
-  "pk": 5,
-  "fields": {
-    "alma_set_id": "25239923780006533",
-    "name": "CLICC Macbooks - YRL",
-    "unit": "YRL",
-    "type": 1,
-    "retrieved": "2025-08-20T18:29:20Z"
-  }
-},
-{
-  "model": "clicc_devices.set",
-  "pk": 6,
-  "fields": {
-    "alma_set_id": "25239918420006533",
-    "name": "CLICC Macbooks - Powell",
-    "unit": "Powell",
-    "type": 1,
-    "retrieved": "2025-08-20T18:29:35Z"
-  }
-},
-{
-  "model": "clicc_devices.set",
-  "pk": 7,
-  "fields": {
-    "alma_set_id": "25232644060006533",
-    "name": "CLICC Chromebooks - YRL",
-    "unit": "YRL",
-    "type": 2,
-    "retrieved": "2025-08-20T18:29:59Z"
-  }
-},
-{
-  "model": "clicc_devices.set",
-  "pk": 8,
-  "fields": {
-    "alma_set_id": "25232640150006533",
-    "name": "CLICC Chromebooks - Powell",
-    "unit": "Powell",
-    "type": 2,
-    "retrieved": "2025-08-20T18:30:13Z"
-  }
-}
 ]

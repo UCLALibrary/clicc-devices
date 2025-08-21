@@ -1,9 +1,9 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
+from django.conf import settings
 from clicc_devices.models import Set, Item
 import logging
 import argparse
-import os
 from alma_api_client import AlmaAPIClient
 
 
@@ -31,13 +31,14 @@ class Command(BaseCommand):
         logging.getLogger("urllib3").setLevel(logging.INFO)
 
         set_id = options.get("set_id")
-        api_key = os.getenv("ALMA_API_KEY")
+        api_key = settings.ALMA_API_KEY
         if not api_key:
             logger.error("ALMA_API_KEY environment variable is not set.")
             return
         alma_client = AlmaAPIClient(api_key)
 
         if set_id:
+            # Check if the set with the given Alma ID exists in the database
             if not Set.objects.filter(alma_set_id=set_id).exists():
                 logger.error(
                     f"Set with Alma ID {set_id} does not exist in this application."

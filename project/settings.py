@@ -183,3 +183,6 @@ LOGGING = {
         },
     },
 }
+
+# Alma API credentials
+ALMA_API_KEY = os.getenv("ALMA_API_KEY")
