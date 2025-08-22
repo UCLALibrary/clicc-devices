@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from clicc_devices.models import Set, Item
 
 
 def default_view(request: HttpRequest) -> HttpResponse:
@@ -34,3 +36,27 @@ def release_notes(request: HttpRequest) -> HttpResponse:
     :return: Rendered HTML for the release notes.
     """
     return render(request, "release_notes.html")
+
+
+@login_required
+def view_sets(request: HttpRequest) -> HttpResponse:
+    """Display all available Sets.
+
+    :param request: The HTTP request object.
+    :return: Rendered HTML for the Sets.
+    """
+
+    all_sets = Set.objects.all().order_by("name")
+    set_data = []
+    for s in all_sets:
+        set_data.append(
+            {
+                "name": s.name,
+                "unit": s.unit,
+                "type": s.type.name,
+                "retrieved": s.retrieved,
+                "item_count": Item.objects.filter(set=s).count(),
+            }
+        )
+
+    return render(request, "view_sets.html", {"set_data": set_data})

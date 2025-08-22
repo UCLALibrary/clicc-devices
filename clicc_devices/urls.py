@@ -6,4 +6,5 @@ urlpatterns = [
     path("logs/", views.show_log, name="show_log"),
     path("logs/<int:line_count>", views.show_log, name="show_log"),
     path("release_notes/", views.release_notes, name="release_notes"),
+    path("view_sets/", views.view_sets, name="view_sets"),
 ]
