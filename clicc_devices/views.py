@@ -5,10 +5,6 @@ from django.contrib.auth.decorators import login_required
 from clicc_devices.models import Set, Item
 
 
-def default_view(request: HttpRequest) -> HttpResponse:
-    return render(request, "base.html")
-
-
 def show_log(request: HttpRequest, line_count: int = 200) -> HttpResponse:
     """Display log file in the browser.
 
