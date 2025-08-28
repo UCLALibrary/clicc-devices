@@ -19,14 +19,20 @@ done
 # Run database migrations
 python manage.py migrate
 
-##### HISTORY: If django-simple-history is used, enable the block below. #####
-# if [ "$DJANGO_RUN_ENV" = "dev" ]; then
-#   # Auto-populate history records; may not be needed, but does no harm in dev environment.
-#   # Logs will show this message, which is OK:
-#   # Existing history found, skipping model <app specific info>
-#   python manage.py populate_history --auto
-# fi
-#### END HISTORY #####
+# Start cron (via sudo).
+# sudo access was set up in Dockerfile and is limited to this one command.
+sudo /usr/sbin/service cron start
+
+# Capture environment to file, for cron to use;
+# otherwise, cron's env is sparse, and values are set at startup by
+# external sources: docker compose (local) or kubernetes (production),
+# so not otherwise available within the container for cron to use.
+env | sort > /home/django/full_env_for_cron.env
+
+# The cron jobs themselves are created and managed via the Django UI.
+# However, when the container starts, there's no crontab - it must be
+# (re)created.
+python manage.py update_crontab
 
 if [ "$DJANGO_RUN_ENV" = "dev" ]; then
   # Create default superuser for dev environment, using django env vars.

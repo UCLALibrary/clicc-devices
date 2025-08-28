@@ -1,8 +1,10 @@
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.core.management import call_command
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from clicc_devices.models import Set, Item
+from clicc_devices.forms import CronForm
+from clicc_devices.models import CronJob, Set, Item
 
 
 def show_log(request: HttpRequest, line_count: int = 200) -> HttpResponse:
@@ -56,3 +58,25 @@ def view_sets(request: HttpRequest) -> HttpResponse:
         )
 
     return render(request, "view_sets.html", {"set_data": set_data})
+
+
+@login_required()
+def crontab(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        form = CronForm(request.POST)
+        if form.is_valid():
+            # No extra validation or data manipulation is needed.
+            # This is a ModelForm, so data can be saved directly.
+            form.save()
+            # Update the operating system crontab (for the django user) with the new data.
+            # This can raise a ValueError if the cron data is bad. I'm deliberately not
+            # catching it, as I want the immediate failure and feedback via the UI.
+            # If it does fail, the previous crontab is left unchanged.
+            call_command("update_crontab")
+    else:
+        # There's only one record, ever; get it if it exists,
+        # otherwise, create it using defaults defined on the model.
+        # Ignore "created" flag returned as second part of tuple.
+        record, _ = CronJob.objects.get_or_create(pk=1)
+        form = CronForm(instance=record)
+    return render(request, "cron.html", {"form": form})

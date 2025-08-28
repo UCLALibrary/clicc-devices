@@ -10,8 +10,14 @@ RUN ln -sf /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
 # Additionally install git, so we can install the alma_api_client package from github.
 RUN apt-get install -y gcc python3-dev libpq-dev git
 
-# Create django user
-RUN useradd -c "django app user" -d /home/django -s /bin/bash -m django
+# For this application, also install cron and sudo,
+# and allow django to start cron.
+RUN apt-get install -y cron sudo \
+    && echo "django ALL=(ALL:ALL) NOPASSWD:/usr/sbin/service cron start" > /etc/sudoers.d/django_cron
+
+# Create django user and switch context to that user.
+# For this application, give django user sudo access.
+RUN useradd -c "django app user" -d /home/django -s /bin/bash -m django -G sudo
 
 # Switch to application directory, creating it if needed
 WORKDIR /home/django/django_app
