@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: uclalibrary/clicc-devices
-  tag: v1.0.0
+  tag: v1.0.1
   pullPolicy: Always
 
 nameOverride: ""
@@ -40,9 +40,9 @@ django:
     run_env: "prod"
     debug: "false"
     allowed_hosts:
-      - clicc-devices.ucla.edu
+      - clicc-devices.library.ucla.edu
     csrf_trusted_origins:
-      - https://clicc-devices.ucla.edu
+      - https://clicc-devices.library.ucla.edu
     log_level: "INFO"
     db_backend: "django.db.backends.postgresql"
     db_name: "clicc_devices"
