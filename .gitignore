@@ -207,6 +207,9 @@ marimo/_lsp/
 __marimo__/
 
 ##### START LOCAL CHANGES #####
+# Local static files collected when testing gunicorn and whitenoise
+staticfiles/
+
 # Local secrets
 *password*
 *secret*
