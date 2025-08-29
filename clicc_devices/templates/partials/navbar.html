@@ -15,12 +15,17 @@
             </ul>
 
             <div class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button">Account</a>
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button">Menu</a>
 
                 <ul class="dropdown-menu dropdown-menu-md-end">
+                    {% if user.is_staff %}
                     <li>
                         <a class="dropdown-item" href="/admin/">Admin Console</a>
                     </li>
+                    <li>
+                        <a class="dropdown-item" href="/cron/">Scheduler</a>
+                    </li>
+                    {% endif %}
                     <li>
                         <a class="dropdown-item" href="/logs/">Logs</a>
                     </li>

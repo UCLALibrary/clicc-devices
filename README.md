@@ -145,3 +145,26 @@ Our deployment system is triggered by changes to the Helm chart.  Typically, thi
 * Breaking changes: update major level (e.g., `v1.0.1` to `v2.0.0`)
 
 In addition to updating version in the Helm chart, update the Release Notes in `release_notes.html`.  Put the latest changes first, following the established format.
+
+## Scheduling updates
+
+Data is updated from Alma via the `/cron/` URL (available via the drop-down Menu as "Scheduler").
+This uses a basic `CronJob` Django model, which stores the standard `cron` schedule fields (minutes, hours, days of month, months, days of week),
+the command to run, and an `enabled` field to turn the job on or off.
+
+`CronJob` records are formatted as needed and output to the `django` user's `crontab` via the `update_crontab` Django management command.
+This command is called when `CronJob` records are updated via the `crontab` Django view.
+
+This currently is a very basic implementation:
+* Only one `CronJob` is allowed (enforced via an overridden `CronJob.save()`).
+* No validation of cron format is done, since the scheduling fields allow ranges and intervals (e.g., `5-10`, `*/5`, `5,10,20,39`, etc.).
+* However, the underlying Linux `crontab` program does some validation, and will reject invalid data.
+
+If there is a future need for multiple `crontab` entries, or for user-friendly schedule entry, more programming will be needed or a
+more complex 3rd-party solution may be a better choice.
+
+The command to retrieve Alma data, when run via `cron`, must be run using `docker_scripts/cron_script.sh`. This is a shell script which
+* obtains the full Django environment (since `cron` has only minimal environment)
+* runs the `retrieve_sets` Django management command
+
+`docker_scripts/cron_script.sh` for this application takes no parameters.  All Alma sets are retrieved on every run.
