@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.core.management import call_command
 from django.utils import timezone
-from .models import CronJob
+from .models import CronJob, Set, ItemType, Item
 from io import StringIO
 
 
@@ -51,8 +51,6 @@ class DeviceViewTests(TestCase):
     # Create some sample data for testing
     @classmethod
     def setUpTestData(cls):
-        from .models import Set, ItemType, Item
-
         type_a = ItemType.objects.create(name="typeA")
         type_b = ItemType.objects.create(name="typeB")
 

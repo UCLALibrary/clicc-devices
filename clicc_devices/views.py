@@ -89,21 +89,21 @@ def devices(request: HttpRequest) -> JsonResponse:
 
     Example response structure:
     {
-        "unit1": {
-            "typeA": 17,
-            "typeB": 42,
-            },
-        "unit2": {
-            "typeA": 3,
-            "typeC": 12,
-            },
+    "unit1": {
+        "typeA": 17,
+        "typeB": 42,
+        },
+    "unit2": {
+        "typeA": 3,
+        "typeC": 12,
+        },
     }
 
     :param request: The HTTP request object.
     :return: JSON response containing all device data.
     """
 
-    all_sets = Set.objects.all().order_by("name")
+    all_sets = Set.objects.all().order_by("unit", "type__name")
     unit_data = {}
     for s in all_sets:
         items = Item.objects.filter(set=s)
