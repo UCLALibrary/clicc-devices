@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.management import call_command
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from clicc_devices.forms import CronForm
 from clicc_devices.models import CronJob, Set, Item
@@ -80,3 +80,37 @@ def crontab(request: HttpRequest) -> HttpResponse:
         record, _ = CronJob.objects.get_or_create(pk=1)
         form = CronForm(instance=record)
     return render(request, "cron.html", {"form": form})
+
+
+def devices(request: HttpRequest) -> JsonResponse:
+    """Endpoint to retrieve all device data as JSON.
+    Data is grouped by Unit. Each Unit contains a dictionary of Item Types
+    and their counts.
+
+    Example response structure:
+    {
+        "unit1": {
+            "typeA": 17,
+            "typeB": 42,
+            },
+        "unit2": {
+            "typeA": 3,
+            "typeC": 12,
+            },
+    }
+
+    :param request: The HTTP request object.
+    :return: JSON response containing all device data.
+    """
+
+    all_sets = Set.objects.all().order_by("name")
+    unit_data = {}
+    for s in all_sets:
+        items = Item.objects.filter(set=s)
+        if s.unit not in unit_data:
+            unit_data[s.unit] = {}
+        if s.type.name not in unit_data[s.unit]:
+            unit_data[s.unit][s.type.name] = 0
+        unit_data[s.unit][s.type.name] += items.count()
+
+    return JsonResponse(unit_data)

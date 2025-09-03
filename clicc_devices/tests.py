@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.core.management import call_command
+from django.utils import timezone
 from .models import CronJob
 from io import StringIO
 
@@ -43,3 +44,59 @@ class CronTest(TestCase):
         expected = output.getvalue()
         # Expected value printed by command has a trailing line feed.
         self.assertEqual(expected, "#0 0 1 1 * echo 'Hello' >> /tmp/cron.log 2>&1\n")
+
+
+class DeviceViewTests(TestCase):
+
+    # Create some sample data for testing
+    @classmethod
+    def setUpTestData(cls):
+        from .models import Set, ItemType, Item
+
+        type_a = ItemType.objects.create(name="typeA")
+        type_b = ItemType.objects.create(name="typeB")
+
+        unit1 = "unit1"
+
+        set1 = Set.objects.create(
+            alma_set_id="set1",
+            name="Set 1",
+            unit=unit1,
+            type=type_a,
+            retrieved=timezone.now(),
+        )
+        set2 = Set.objects.create(
+            alma_set_id="set2",
+            name="Set 2",
+            unit=unit1,
+            type=type_b,
+            retrieved=timezone.now(),
+        )
+        # same unit and type as set1, to test aggregation
+        set3 = Set.objects.create(
+            alma_set_id="set3",
+            name="Set 3",
+            unit=unit1,
+            type=type_a,
+            retrieved=timezone.now(),
+        )
+
+        # Add items to sets
+        for i in range(3):
+            Item.objects.create(set=set1, barcode=f"barcode_a_{i+1}")
+        for i in range(4):
+            Item.objects.create(set=set2, barcode=f"barcode_b_{i+1}")
+        for i in range(5):
+            Item.objects.create(set=set3, barcode=f"barcode_a2_{i+1}")
+
+    def test_devices_view_structure(self):
+        response = self.client.get("/devices/")
+        data = response.json()
+        # Check top-level keys
+        self.assertIn("unit1", data)
+        unit1_data = data["unit1"]
+        # Check item types and counts
+        self.assertIn("typeA", unit1_data)
+        self.assertIn("typeB", unit1_data)
+        self.assertEqual(unit1_data["typeA"], 8)  # 3 from set1 + 5 from set3
+        self.assertEqual(unit1_data["typeB"], 4)
