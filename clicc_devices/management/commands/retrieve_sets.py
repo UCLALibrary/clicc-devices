@@ -4,7 +4,7 @@ from django.conf import settings
 from clicc_devices.models import Set, Item
 import logging
 import argparse
-from alma_api_client import AlmaAPIClient
+from alma_api_client import AlmaAPIClient, APIError
 
 
 class Command(BaseCommand):
@@ -55,11 +55,12 @@ class Command(BaseCommand):
             )
 
             # Retrieve set from Alma
-            alma_set = alma_client.get_set(set_obj.alma_set_id)
-
-            if not alma_set:
+            try:
+                alma_set = alma_client.get_set(set_obj.alma_set_id)
+            except APIError as e:
                 logger.error(
-                    f"Failed to retrieve Alma set with Alma ID {set_obj.alma_set_id}."
+                    f"Failed to retrieve Alma set with Alma ID {set_obj.alma_set_id}: "
+                    f"{e.error_messages}",
                 )
                 continue
 
@@ -84,3 +85,4 @@ class Command(BaseCommand):
                 f"(Alma ID: {set_obj.alma_set_id}). "
                 f"Items retrieved: {num_items}."
             )
+        logger.info("Set retrieval process completed.")
