@@ -59,7 +59,7 @@ class Command(BaseCommand):
                 alma_set = alma_client.get_set(set_obj.alma_set_id)
             except APIError as e:
                 logger.error(
-                    f"Failed to retrieve Alma set with Alma ID {set_obj.alma_set_id}: ",
+                    f"Failed to retrieve Alma set with Alma ID {set_obj.alma_set_id}: "
                     f"{e.error_messages}",
                 )
                 continue
