@@ -52,10 +52,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_bootstrap5",
+    "corsheaders",
     "clicc_devices",
 ]
 
 MIDDLEWARE = [
+    # corsheaders should be as early as possible in this list
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     # Enable whitenoise in production too
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -186,3 +189,14 @@ LOGGING = {
 
 # Alma API credentials
 ALMA_API_KEY = os.getenv("ALMA_API_KEY")
+
+# CORS headers configuration, to allow our API responses
+# to be used by our own websites.
+# Production: just one domain
+CORS_ALLOWED_ORIGINS = [
+    "https://library.ucla.edu",
+]
+# Test/CI: Wildcards needed for Netlify
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://deploy-preview-\d+--uclalibrary-test\.netlify\.app$",
+]
