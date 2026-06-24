@@ -98,3 +98,36 @@ class DeviceViewTests(TestCase):
         self.assertIn("typeB", unit1_data)
         self.assertEqual(unit1_data["typeA"], 8)  # 3 from set1 + 5 from set3
         self.assertEqual(unit1_data["typeB"], 4)
+
+
+class CORSHeadersTests(TestCase):
+    def test_valid_prod_origin(self):
+        # Add production website origin header to request
+        prod_origin = "https://library.ucla.edu"
+        request_headers = {"Origin": prod_origin}
+        response = self.client.get("/devices/", headers=request_headers)
+        expected_header = "access-control-allow-origin"
+        expected_header_value = prod_origin
+        self.assertIn(expected_header, response.headers)
+        self.assertEqual(expected_header_value, response.headers.get(expected_header))
+
+    def test_valid_test_origin(self):
+        # Add test website origin header to request.
+        # These vary, so this tests the regex in settings.CORS_ALLOWED_ORIGIN_REGEXES
+        test_origin = "https://deploy-preview-931--uclalibrary-test.netlify.app"
+        request_headers = {"Origin": test_origin}
+        response = self.client.get("/devices/", headers=request_headers)
+        expected_header = "access-control-allow-origin"
+        expected_header_value = test_origin
+        self.assertIn(expected_header, response.headers)
+        self.assertEqual(expected_header_value, response.headers.get(expected_header))
+
+    def test_invalid_origin(self):
+        # Add an unsupported (not allowed) origin header to request.
+        invalid_origin = "https://my.evilhacker.site"
+        request_headers = {"Origin": invalid_origin}
+        response = self.client.get("/devices/", headers=request_headers)
+        # In this case, the access control header should not be present,
+        # since the Origin header is not in our allowed values.
+        unexpected_header = "access-control-allow-origin"
+        self.assertNotIn(unexpected_header, response.headers)
