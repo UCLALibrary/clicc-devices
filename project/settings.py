@@ -192,8 +192,9 @@ ALMA_API_KEY = os.getenv("ALMA_API_KEY")
 
 # CORS headers configuration, to allow our API responses
 # to be used by our own websites.
-# Production: just one domain
+# Production: explicit domains, though library redirects to www.library.
 CORS_ALLOWED_ORIGINS = [
+    "https://www.library.ucla.edu",
     "https://library.ucla.edu",
 ]
 # Test/CI: Wildcards needed for Netlify

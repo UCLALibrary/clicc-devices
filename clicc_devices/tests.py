@@ -103,7 +103,7 @@ class DeviceViewTests(TestCase):
 class CORSHeadersTests(TestCase):
     def test_valid_prod_origin(self):
         # Add production website origin header to request
-        prod_origin = "https://library.ucla.edu"
+        prod_origin = "https://www.library.ucla.edu"
         request_headers = {"Origin": prod_origin}
         response = self.client.get("/devices/", headers=request_headers)
         expected_header = "access-control-allow-origin"
