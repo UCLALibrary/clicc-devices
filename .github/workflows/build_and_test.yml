@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 jobs:
   build_and_test:
+    name: Build and Test
     runs-on: ubuntu-latest
     env:
       # Docker-compose file for testing via Github Actions
